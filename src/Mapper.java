@@ -28,7 +28,7 @@ public class Mapper {
         return null;
     }
 
-    public void finishMaze() { //lecim po całym labiryncie, zamieniając 1 na + i jeśli x ^ y % 2 == 0 to buildAWall i ustal czy ściana czy nie ściana
+    public void finishMaze() { //lecim po całym labiryncie, zamieniając '1' na '+' i jeśli x ^ y % 2 == 0 to buildAWall i ustal czy ściana, czy nie ściana
 
     }
 
