@@ -1,5 +1,9 @@
 public class Mapper {
 
+    Robot walle;
+    Parser parsik;
+    Maze maze;
+
     public Mapper() {
 
     }
