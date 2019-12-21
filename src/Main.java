@@ -1,9 +1,11 @@
+import java.io.FileNotFoundException;
+
 public class Main {
 
     private static final int mapNumber = 1;
 
     public static void main(String[] args) {
-        Parser p = new Parser();
+        /*Parser p = new Parser();
         String s = "10x5";
         int[] size = p.parseSize(s);
 
@@ -14,10 +16,13 @@ public class Main {
         boolean[] posibilities = p.parsePossibilities(pos);
 
         for(boolean b: posibilities)
-            System.out.println(b);
+            System.out.println(b);*/
+        Robot r = new Robot(1, 1);
+        r.move(2);
+        r.print();
     }
 
-    public static void save(Maze maze, String path) { //jeśli nie będziemy tu nic do końca roboty dopisywać to trza to wrzucić do maina i wsio
+    public static void save(Maze maze, String path) throws FileNotFoundException { //jeśli nie będziemy tu nic do końca roboty dopisywać to trza to wrzucić do maina i wsio
         MazeFile.saveToFile(maze, path);
     }
 

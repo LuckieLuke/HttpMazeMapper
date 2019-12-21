@@ -3,13 +3,10 @@ public class Parser {
     public boolean[] parsePossibilities(String body) { //bool[4] ← przygotowuje tablicę z body
         boolean[] pos = new boolean[4];
 
-        for(boolean b: pos)
-            b = false;
-
-        int directions = 0;
+        int directions = 0, dist = 3;
         for(int i = 0; i < body.length(); i++) {
             if(body.charAt(i) == ':') {
-                boolean pass = (body.charAt(i+3) == '0');
+                boolean pass = (body.charAt(i+dist) == '0');
                 switch (directions) {
                     case 0:
                         pos[3] = pass;

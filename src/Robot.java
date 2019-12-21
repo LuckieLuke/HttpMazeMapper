@@ -13,7 +13,11 @@ public class Robot {
     }
 
     public void move(int direction) {
-
+        s.push(3);
+        s.push(5);
+        s.push(8);
+        s.pop();
+        s.push(7);
     }
 
     public int getX() {
@@ -24,19 +28,31 @@ public class Robot {
         return y;
     }
 
-    private static class Stack<Integer> {
+    public void print() {
+        System.out.println("Position: " + x + ", " + y);
+        System.out.print("Stack: ");
+        s.printStack();
+    }
+
+    private static class Stack {
         ArrayList<Integer> s;
 
         Stack() {
             s = new ArrayList<>();
         }
 
-        public void push(Integer x) {
+        void push(Integer x) {
             s.add(s.size(), x);
         }
 
-        public int pop() {
-            return (int)s.remove(s.size()-1);
+        int pop() {
+            return s.remove(s.size()-1);
+        }
+
+        void printStack() {
+            for(Integer i: s)
+                System.out.print(i + " ");
+            System.out.println();
         }
     }
 }
