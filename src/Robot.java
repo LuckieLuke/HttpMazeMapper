@@ -6,9 +6,9 @@ public class Robot {
     private int x;
     private int y;
 
-    public Robot(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Robot(int[] position) {
+        x = position[1];
+        y = position[0];
         s = new Stack();
     }
 
@@ -26,6 +26,10 @@ public class Robot {
 
     public int getY() {
         return y;
+    }
+
+    public boolean isStackEmpty() {
+        return s.isEmpty();
     }
 
     public void print() {
@@ -47,6 +51,10 @@ public class Robot {
 
         int pop() {
             return s.remove(s.size()-1);
+        }
+
+        boolean isEmpty() {
+            return s.size() == 0;
         }
 
         void printStack() {
