@@ -7,8 +7,8 @@ public class Robot {
     private int y;
 
     public Robot(int[] position) {
-        x = position[1];
-        y = position[0];
+        x = position[0];
+        y = position[1];
         s = new Stack();
     }
 

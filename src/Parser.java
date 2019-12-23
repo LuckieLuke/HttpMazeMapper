@@ -38,12 +38,12 @@ public class Parser {
         return size;
     }
 
-    public int[] parseStartPosition(String body) { //tutaj chyba trza inaczej przeliczyć, bo dla początkowego np 1,1, tu powinno też zwrócić [1,1], a zwróci [3,3], cnie?
+    public int[] parseStartPosition(String body) {
         String[] startString = body.split(",");
         int[] start = new int[startString.length];
 
         for(int i = 0; i < start.length; i++)
-            start[i] = Integer.parseInt(startString[i]) * 2 + 1;
+            start[i] = Integer.parseInt(startString[i]) * 2 - 1;
 
         return start;
     }

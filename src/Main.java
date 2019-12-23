@@ -13,11 +13,11 @@ public class Main {
             System.out.println(i);
 
         String pos = "\"down\": \"+\",\n \"left\": \"0\",\n \"right\": \"+\",\n \"up\": \"0\",\n ";
-        boolean[] posibilities = p.parsePossibilities(pos);
+        boolean[] possibilities = p.parsePossibilities(pos);
 
-        for(boolean b: posibilities)
+        for(boolean b: possibilities)
             System.out.println(b);*/
-        Robot r = new Robot(1, 1);
+        Robot r = new Robot(new int[]{1, 3});
         r.move(2);
         r.print();
     }
