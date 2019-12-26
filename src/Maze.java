@@ -10,6 +10,12 @@ public class Maze {
         width = maze[0].length;
     }
 
+    public Maze(int[] size) {
+        maze = new char[size[0]][size[1]];
+        height = maze.length;
+        width = maze[0].length;
+    }
+
     public char getChar(int x, int y) {
         return maze[y][x];
     }

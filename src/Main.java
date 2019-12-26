@@ -3,9 +3,10 @@ import java.io.FileNotFoundException;
 public class Main {
 
     private static final int mapNumber = 1;
+    private static final String NAJLEPSZEuId = "6a1bcbed";
 
     public static void main(String[] args) {
-        /*Parser p = new Parser();
+/*        Parser p = new Parser();
         String s = "10x5";
         int[] size = p.parseSize(s);
 
@@ -16,10 +17,13 @@ public class Main {
         boolean[] possibilities = p.parsePossibilities(pos);
 
         for(boolean b: possibilities)
-            System.out.println(b);*/
+            System.out.println(b);
         Robot r = new Robot(new int[]{1, 3});
         r.move(2);
-        r.print();
+        r.print();*/
+
+        Mapper mapper = new Mapper();
+        mapper.mapFromHttp(NAJLEPSZEuId, mapNumber);
     }
 
     public static void save(Maze maze, String path) throws FileNotFoundException { //jeśli nie będziemy tu nic do końca roboty dopisywać to trza to wrzucić do maina i wsio

@@ -1,15 +1,27 @@
 public class Mapper {
 
+    HTTPConnector http;
     Robot walle;
-    Parser parsik;
     Maze maze;
 
     public Mapper() {
-
     }
 
-    public void mapFromHttp() {
+    public void mapFromHttp(String uId, int mapId) {
+        http = new HTTPConnector(uId, mapId);
+        maze = new Maze(http.getSize());
+        int direction;
+        int[] choice;
 
+
+        get();
+        choice = choose();
+        direction = choice[0];
+        walle.move(direction, http);
+
+        while(!walle.isStackEmpty() && !walle.isAtStartPosition()){
+
+        }
     }
 
     public void mapFromArray() {
@@ -17,7 +29,8 @@ public class Mapper {
     }
 
     public boolean[] get() { //bool[4] ← 0-left, 1-up, 2-right, 3-down - wysyła zapytanie GET po  http i korzysta z parsera, żeby wyciągnąć info, zamienia pole na 0
-        return null;
+        maze.setChar(walle.getX(), walle.getY(), '0'); // to możnaby jakoś usprawnić żeby nie pobierać oddzielnie x i y z robocika
+        return new boolean[4];
     }
 
     public boolean[] getFromArray() {

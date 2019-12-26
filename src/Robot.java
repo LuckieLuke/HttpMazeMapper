@@ -3,21 +3,30 @@ import java.util.ArrayList;
 public class Robot {
 
     private Stack s;
+    private int[] startPosition;
     private int x;
     private int y;
 
-    public Robot(int[] position) {
-        x = position[0];
-        y = position[1];
+    public Robot(int[] startPosition) {
+        this.startPosition = startPosition;
+        x = startPosition[0];
+        y = startPosition[1];
         s = new Stack();
     }
 
-    public void move(int direction) {
-        s.push(3);
+    public void move(int direction, HTTPConnector http) {
+
+        http.move("left");
+
+        /*        s.push(3);
         s.push(5);
         s.push(8);
         s.pop();
-        s.push(7);
+        s.push(7);*/
+    }
+
+    public boolean isAtStartPosition(){
+        return x == startPosition[0] && y == startPosition[1];
     }
 
     public int getX() {
