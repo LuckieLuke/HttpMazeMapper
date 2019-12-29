@@ -3,7 +3,7 @@ public class Parser {
     public boolean[] parsePossibilities(String body) { //bool[4] ← przygotowuje tablicę z body
         boolean[] pos = new boolean[4];
 
-        int directions = 0, dist = 3;
+        int directions = 0, dist = 2;
         for(int i = 0; i < body.length(); i++) {
             if(body.charAt(i) == ':') {
                 boolean pass = (body.charAt(i+dist) == '0');
@@ -53,7 +53,7 @@ public class Parser {
         try {
             moves = Integer.parseInt(body);
         } catch (NumberFormatException e) {
-            System.out.println("Cannot format to Integer!");
+            throw new NumberFormatException("Cannot format to Integer!");
         }
 
         return moves;

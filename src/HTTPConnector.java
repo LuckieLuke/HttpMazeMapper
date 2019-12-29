@@ -5,6 +5,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class HTTPConnector {
+
     private String uId;
     private int mapId;
     private HttpClient client;
@@ -71,9 +72,10 @@ public class HTTPConnector {
         return parsik.parseMoves(response.body());
     }
 
-    public boolean[] getPossibilites() {
+    public boolean[] getPossibilities() {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(possibilitiesUriString)).build();
         HttpResponse<String> response = getResponse(request);
+
         return parsik.parsePossibilities(response.body());
     }
 
