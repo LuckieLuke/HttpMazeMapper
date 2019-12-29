@@ -7,6 +7,11 @@ public class Robot {
     private int x;
     private int y;
 
+    private final int LEFT = 1;
+    private final int UP = 2;
+    private final int RIGHT = -1;
+    private final int DOWN = -2;
+
     public Robot(int[] startPosition) {
         this.startPosition = startPosition;
         x = startPosition[0];
@@ -18,11 +23,6 @@ public class Robot {
 
         http.move("left");
 
-        /*        s.push(3);
-        s.push(5);
-        s.push(8);
-        s.pop();
-        s.push(7);*/
     }
 
     public boolean isAtStartPosition(){
@@ -39,6 +39,14 @@ public class Robot {
 
     public boolean isStackEmpty() {
         return s.isEmpty();
+    }
+
+    public void push(int direction) {
+        s.push(direction);
+    }
+
+    public int pop() {
+        return s.pop();
     }
 
     public void print() {

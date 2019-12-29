@@ -4,6 +4,11 @@ public class Mapper {
     Robot walle;
     Maze maze;
 
+    private final int LEFT = 1;
+    private final int UP = 2;
+    private final int RIGHT = -1;
+    private final int DOWN = -2;
+
     public Mapper() {
     }
 
@@ -19,9 +24,25 @@ public class Mapper {
         direction = choice[0];
         walle.move(direction, http);
 
-        while(!walle.isStackEmpty() && !walle.isAtStartPosition()){
-
+        while(!walle.isStackEmpty() && !walle.isAtStartPosition() && walle.areAnyHashesAround()){
+            get();
+            choose();
         }
+
+
+
+/*
+        robimy get, choose, move, push i na stos
+        while(!isRobocikNaStarcie && !s.isEmpty() && areHaszeWokółStart)
+            get
+            choose
+            checkSum
+            check
+            move
+            push
+        finishMaze
+*/
+
     }
 
     public void mapFromArray() {
@@ -30,7 +51,7 @@ public class Mapper {
 
     public boolean[] get() { //bool[4] ← 0-left, 1-up, 2-right, 3-down - wysyła zapytanie GET po  http i korzysta z parsera, żeby wyciągnąć info, zamienia pole na 0
         maze.setChar(walle.getX(), walle.getY(), '0'); // to możnaby jakoś usprawnić żeby nie pobierać oddzielnie x i y z robocika
-        return new boolean[4];
+        return null;
     }
 
     public boolean[] getFromArray() {
