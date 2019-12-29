@@ -49,6 +49,10 @@ public class Robot {
         return s.pop();
     }
 
+    public boolean areAnyHashesAround() {
+        return false;
+    }
+
     public void print() {
         System.out.println("Position: " + x + ", " + y);
         System.out.print("Stack: ");

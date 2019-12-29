@@ -35,6 +35,25 @@ public class Maze {
         return sum;
     }
 
+    public void setPossibilitiesChars(int x, int y, boolean[] possibilities) {
+        for(int i = 0; i < 4; i++){
+            switch (i){
+                case 0:
+                    maze[x-1][y] = possibilities[0] ? '#' : '+';
+                    break;
+                case 1:
+                    maze[x][y-1] = possibilities[1] ? '#' : '+';
+                    break;
+                case 2:
+                    maze[x+1][y] = possibilities[2] ? '#' : '+';
+                    break;
+                case 3:
+                    maze[x][y+1] = possibilities[3] ? '#' : '+';
+                    break;
+            }
+        }
+    }
+
     public int getHeight() {
         return height;
     }
