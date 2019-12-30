@@ -2,13 +2,14 @@ import java.io.FileNotFoundException;
 
 public class Main {
 
-    private static final int mapNumber = 1;
+    private static final int mapNumber = 2;
     private static final String NAJLEPSZEuId = "6a1bcbed";
 
     public static void main(String[] args) {
-/*        Mapper mapper = new Mapper();
-        mapper.mapFromHttp(NAJLEPSZEuId, mapNumber);*/
-
+        Mapper mapper = new Mapper();
+        mapper.mapFromHttp(NAJLEPSZEuId, mapNumber);
+/*        HTTPConnector connector = new HTTPConnector(NAJLEPSZEuId, mapNumber);
+        System.out.println(connector.getMoves());*/
 
     }
 

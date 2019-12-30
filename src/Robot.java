@@ -12,11 +12,18 @@ public class Robot {
     private final int RIGHT = -1;
     private final int DOWN = -2;
 
+    public boolean isLastOperationPop() {
+        return lastOperationPop;
+    }
+
+    private boolean lastOperationPop;
+
     public Robot(int[] startPosition) {
         this.startPosition = startPosition;
         x = startPosition[0];
         y = startPosition[1];
         s = new Stack();
+        lastOperationPop = false;
     }
 
     public void move(int direction) {
@@ -60,6 +67,14 @@ public class Robot {
         System.out.println("Position: " + x + ", " + y);
         System.out.print("Stack: ");
         s.printStack();
+    }
+
+    public boolean isStackEmpty(){
+        return s.isEmpty();
+    }
+
+    public void setLastOperationPop(boolean lastOperationPop){
+        this.lastOperationPop = lastOperationPop;
     }
 
     private static class Stack {

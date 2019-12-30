@@ -20,20 +20,34 @@ public class Mapper {
         int direction;
         boolean[] possibilities;
 
-        possibilities = get();
-        maze.setPossibilitiesChars(walle.getX(), walle.getY(), possibilities);
-        direction = choose();
-        if(maze.getSum() == 0)
-            return;
-        move(direction);
 
-/*        while(!walle.isAtStartPosition() && maze.areAnyHashesAround(walle.getx(), walle.getY())){
+        int i = 0;
+        while(i < 8) {
+
+            possibilities = get();
+
+            maze.setPossibilitiesChars(walle.getX(), walle.getY(), possibilities);
+
+            direction = choose();
+            if (maze.getActualSum() == maze.getMazeSum())
+                return;
+            move(direction);
+            if(!walle.isLastOperationPop())
+                walle.push(direction);
+            walle.print();
+            maze.printMaze();
+            System.out.println();
+
+            i++;
+        }
+        maze.printMaze();
+        System.out.println();
+        http.reset();
+
+
+/*        while(!walle.isStackEmpty() && !walle.isAtStartPosition() && maze.areAnyHashesAround(walle.getx(), walle.getY())){
 
         }*/
-
-
-
-
 
 /*
         robimy get, choose, move, push i na stos
@@ -62,16 +76,19 @@ public class Mapper {
         int result = 0;
         int[] pos = new int[]{walle.getX(), walle.getY()};
         if(maze.areAnyHashesAround(pos[0], pos[1])) {
+            walle.setLastOperationPop(false);
+
             if (maze.getChar(pos[0], pos[1]+1) == '#')
-                result = 3;
+                result = -2;
             if(maze.getChar(pos[0]+1, pos[1]) == '#')
-                result = 2;
+                result = -1;
             if(maze.getChar(pos[0], pos[1]-1) == '#')
-                result = 1;
+                result = 2;
             if(maze.getChar(pos[0]-1, pos[1]) == '#')
-                result = 0;
+                result = 1;
         }
         else {
+            walle.setLastOperationPop(true);
             result = -walle.pop();
         }
         return result;
@@ -93,6 +110,7 @@ public class Mapper {
                 break;
         }
         walle.move(direction);
+        http.move(direction);
     }
 
     public boolean[] getFromArray() {
