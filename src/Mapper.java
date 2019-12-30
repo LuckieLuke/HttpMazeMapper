@@ -31,8 +31,8 @@ public class Mapper {
         walle.move(direction, http);
 
         while(!walle.isStackEmpty() && !walle.isAtStartPosition() && walle.areAnyHashesAround()){
-            get();
-            choose();
+/*            get();
+            choose();*/
         }
 
 

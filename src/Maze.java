@@ -8,12 +8,31 @@ public class Maze {
         maze = new char[y][x];
         height = maze.length;
         width = maze[0].length;
+
+        for(int i = 0; i < height; i++) {
+            for(int j = 0; j < width; j++) {
+                if(i == 0 || j == 0 || i == height-1 || j == width-1)
+                    maze[i][j] = '+';
+                else
+                    maze[i][j] = '1';
+            }
+        }
     }
 
     public Maze(int[] size) {
         maze = new char[size[0]][size[1]];
         height = maze.length;
         width = maze[0].length;
+
+
+        for(int i = 0; i < height; i++) {
+            for(int j = 0; j < width; j++) {
+                if(i == 0 || j == 0 || i == height-1 || j == width-1)
+                    maze[i][j] = '+';
+                else
+                    maze[i][j] = '1';
+            }
+        }
     }
 
     public char getChar(int x, int y) {
@@ -26,8 +45,8 @@ public class Maze {
 
     public int getSum() {
         int sum = 0;
-        for(int i = 1; i < height-1; i++) {
-            for (int j = 1; j < width - 1; j++) {
+        for(int i = 2; i < height-1; i+=2) {
+            for (int j = 2; j < width-1; j+=2) {
                 if (maze[i][j] > '0')
                     sum++;
             }
@@ -60,6 +79,15 @@ public class Maze {
 
     public int getWidth() {
         return width;
+    }
+
+    public void printMaze() {
+        for(int i = 0; i < height; i++) {
+            for(int j = 0; j < width; j++) {
+                System.out.print(maze[i][j]);
+            }
+            System.out.println();
+        }
     }
 
 }
