@@ -1,8 +1,8 @@
 public class Mapper {
 
-    HTTPConnector http;
-    Robot walle;
-    Maze maze;
+    private HTTPConnector http;
+    private Robot walle;
+    private Maze maze;
 
     private final int LEFT = 1;
     private final int UP = 2;
@@ -18,22 +18,20 @@ public class Mapper {
         walle = new Robot(http.getStartPosition());
 
         int direction;
-        int[] choice;
         boolean[] possibilities;
-        boolean isPopFromStack;
-
 
         possibilities = get();
         maze.setPossibilitiesChars(walle.getX(), walle.getY(), possibilities);
-        choice = choose(possibilities);
-        direction = choice[0];
-        isPopFromStack = choice[1] == 1 ? true : false;
-        walle.move(direction, http);
+        direction = choose();
+        if(maze.getSum() == 0)
+            return;
+        move(direction);
 
-        while(!walle.isStackEmpty() && !walle.isAtStartPosition() && walle.areAnyHashesAround()){
-/*            get();
-            choose();*/
-        }
+/*        while(!walle.isAtStartPosition() && maze.areAnyHashesAround(walle.getx(), walle.getY())){
+
+        }*/
+
+
 
 
 
@@ -60,10 +58,41 @@ public class Mapper {
         return http.getPossibilities();
     }
 
-    public int[] choose(boolean[] possibilities) //int[2] ← od lewej zgodnie ze wskazówkami zegara
-    {
+    public int choose() {
+        int result = 0;
+        int[] pos = new int[]{walle.getX(), walle.getY()};
+        if(maze.areAnyHashesAround(pos[0], pos[1])) {
+            if (maze.getChar(pos[0], pos[1]+1) == '#')
+                result = 3;
+            if(maze.getChar(pos[0]+1, pos[1]) == '#')
+                result = 2;
+            if(maze.getChar(pos[0], pos[1]-1) == '#')
+                result = 1;
+            if(maze.getChar(pos[0]-1, pos[1]) == '#')
+                result = 0;
+        }
+        else {
+            result = -walle.pop();
+        }
+        return result;
+    }
 
-        return null;
+    public void move(int direction) {
+        switch(direction) {
+            case LEFT:
+                maze.setChar(walle.getX()-1, walle.getY(), '0');
+                break;
+            case UP:
+                maze.setChar(walle.getX(), walle.getY()-1, '0');
+                break;
+            case RIGHT:
+                maze.setChar(walle.getX()+1, walle.getY(), '0');
+                break;
+            case DOWN:
+                maze.setChar(walle.getX(), walle.getY()+1, '0');
+                break;
+        }
+        walle.move(direction);
     }
 
     public boolean[] getFromArray() {

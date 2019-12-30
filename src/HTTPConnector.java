@@ -38,13 +38,33 @@ public class HTTPConnector {
         return new StringBuilder("http://tesla.iem.pw.edu.pl:4444/").append(uid).append("/").append(mapId);
     }
 
-    public void move(String direction){ //nie wiem jak przekazujemy kierunek na razie gotowy string np. "left"
+    public void move(int intDirection){ //nie wiem jak przekazujemy kierunek na razie gotowy string np. "left"
+        String direction = getDirection(intDirection);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(getBase(uId, mapId).append("/move/").append(direction).toString()))
                 .POST(HttpRequest.BodyPublishers.ofString("")) .build();
         HttpResponse<String> response = getResponse(request);
 
         //nie pamiętam czy move ma coś zwracać ale nawet jeśli to chyba nie tu xd
+    }
+
+    private String getDirection(int direction) {
+        String result = "";
+        switch(direction) {
+            case 1:
+                result = "left";
+                break;
+            case 2:
+                result = "up";
+                break;
+            case -1:
+                result = "right";
+                break;
+            case -2:
+                result = "down";
+                break;
+        }
+        return result;
     }
 
     public void reset() {

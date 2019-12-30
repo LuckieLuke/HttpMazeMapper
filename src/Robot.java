@@ -19,10 +19,21 @@ public class Robot {
         s = new Stack();
     }
 
-    public void move(int direction, HTTPConnector http) {
-
-        http.move("left");
-
+    public void move(int direction) {
+        switch(direction) {
+            case LEFT:
+                x -= 2;
+                break;
+            case UP:
+                y -= 2;
+                break;
+            case RIGHT:
+                x += 2;
+                break;
+            case DOWN:
+                y += 2;
+                break;
+        }
     }
 
     public boolean isAtStartPosition(){
@@ -37,20 +48,12 @@ public class Robot {
         return y;
     }
 
-    public boolean isStackEmpty() {
-        return s.isEmpty();
-    }
-
     public void push(int direction) {
         s.push(direction);
     }
 
     public int pop() {
         return s.pop();
-    }
-
-    public boolean areAnyHashesAround() {
-        return false;
     }
 
     public void print() {

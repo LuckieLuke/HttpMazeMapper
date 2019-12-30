@@ -1,5 +1,8 @@
 public class Maze {
 
+    private final int[] dx = {-1, 0, 1, 0};
+    private final int[] dy = {0, -1, 0, 1};
+
     private char[][] maze;
     private int height;
     private int width;
@@ -55,23 +58,16 @@ public class Maze {
     }
 
     public void setPossibilitiesChars(int x, int y, boolean[] possibilities) {
-        for(int i = 0; i < 4; i++){
-            switch (i){
-                case 0:
-                    maze[x-1][y] = possibilities[0] ? '#' : '+';
-                    break;
-                case 1:
-                    maze[x][y-1] = possibilities[1] ? '#' : '+';
-                    break;
-                case 2:
-                    maze[x+1][y] = possibilities[2] ? '#' : '+';
-                    break;
-                case 3:
-                    maze[x][y+1] = possibilities[3] ? '#' : '+';
-                    break;
-            }
+        for(int i = 0; i < dx.length; i++) {
+            if(maze[y+dy[i]][x+dx[i]] != '1')
+                maze[y+dy[i]][x+dx[i]] = possibilities[i] ? '#' : '+';
         }
     }
+
+    public boolean areAnyHashesAround(int x, int y) {
+        return maze[y][x-1] == '#' || maze[y][x+1] == '#' || maze[y-1][x] == '#' || maze[y+1][x] == '#';
+    }
+
 
     public int getHeight() {
         return height;
@@ -89,5 +85,4 @@ public class Maze {
             System.out.println();
         }
     }
-
 }
