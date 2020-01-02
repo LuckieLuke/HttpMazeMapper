@@ -11,18 +11,18 @@ public class Mapper {
 
     private final int CHOSE_ERROR = -5;
 
-    public Mapper() {
+    public Mapper(HTTPConnector http) {
+        this.http = http;
     }
 
-    public Maze mapFromHttp(String uId, int mapId) {
-        http = new HTTPConnector(uId, mapId);
+    public Maze mapFromHttp() {
         maze = new Maze(http.getSize());
         walle = new Robot(http.getStartPosition());
 
         int direction;
         boolean[] possibilities;
 
-        http.reset();
+        http.postReset();
 
         do {
             possibilities = get();
@@ -91,7 +91,7 @@ public class Mapper {
                 break;
         }
         walle.move(direction);
-        http.move(direction);
+        http.postMove(direction);
     }
 
     public void finishMaze() {

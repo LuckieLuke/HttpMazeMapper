@@ -1,8 +1,10 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Paths;
 
 public class HTTPConnector {
 
@@ -16,7 +18,7 @@ public class HTTPConnector {
     private String movesUriString;
     private String startPositionUriString;
     private String resetUriString;
-    //private String moveUriString;     na razie chyba niepotrzebne
+    private String uploadUriString;
 
     public HTTPConnector(String uId, int mapId) {
         this.uId = uId;
@@ -30,6 +32,7 @@ public class HTTPConnector {
         resetUriString = getBase(uId, mapId).append("/reset").toString();
         sizeUriString = getBase(uId, mapId).append("/size").toString();
         movesUriString = getBase(uId, mapId).append("/moves").toString();
+        uploadUriString = getBase(uId, mapId).append("/upload").toString();
         startPositionUriString = getBase(uId, mapId).append("/startposition").toString();
         possibilitiesUriString = getBase(uId, mapId).append("/possibilities").toString();
     }
@@ -38,19 +41,9 @@ public class HTTPConnector {
         return new StringBuilder("http://tesla.iem.pw.edu.pl:4444/").append(uid).append("/").append(mapId);
     }
 
-    public void move(int intDirection){ //nie wiem jak przekazujemy kierunek na razie gotowy string np. "left"
-        String direction = getDirection(intDirection);
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(getBase(uId, mapId).append("/move/").append(direction).toString()))
-                .POST(HttpRequest.BodyPublishers.ofString("")) .build();
-        HttpResponse<String> response = getResponse(request);
-
-        //nie pamiętam czy move ma coś zwracać ale nawet jeśli to chyba nie tu xd
-    }
-
     private String getDirection(int direction) {
         String result = "";
-        switch(direction) {
+        switch (direction) {
             case 1:
                 result = "left";
                 break;
@@ -67,11 +60,25 @@ public class HTTPConnector {
         return result;
     }
 
-    public void reset() {
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(resetUriString)).POST(HttpRequest.BodyPublishers.ofString("")) .build();
-        HttpResponse<String> response = getResponse(request);
+    public void postMove(int intDirection) {
+        String direction = getDirection(intDirection);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(getBase(uId, mapId).append("/move/").append(direction).toString()))
+                .POST(HttpRequest.BodyPublishers.ofString("")).build();
+    }
 
+    public void postReset() {
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(resetUriString)).POST(HttpRequest.BodyPublishers.ofString("")).build();
+        HttpResponse<String> response = getResponse(request);
         //response.body() <-- można sprawdzić czy wyszło resetowanie (ale można też nie)
+    }
+
+    public void postUpload(String path) throws FileNotFoundException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uploadUriString)).POST(HttpRequest.BodyPublishers.ofFile(Paths.get(path)))
+                .build();
+        HttpResponse<String> response = getResponse(request);
+        //response.body() <-- to jest ile procent dobrze zmapowaliśmy maze
     }
 
     public int[] getSize() {
@@ -80,13 +87,13 @@ public class HTTPConnector {
         return parsik.parseSize(response.body());
     }
 
-    public int[] getStartPosition(){
+    public int[] getStartPosition() {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(startPositionUriString)).build();
         HttpResponse<String> response = getResponse(request);
         return parsik.parseStartPosition(response.body());
     }
 
-    public int getMoves(){
+    public int getMoves() {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(movesUriString)).build();
         HttpResponse<String> response = getResponse(request);
         return parsik.parseMoves(response.body());
@@ -95,7 +102,6 @@ public class HTTPConnector {
     public boolean[] getPossibilities() {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(possibilitiesUriString)).build();
         HttpResponse<String> response = getResponse(request);
-
         return parsik.parsePossibilities(response.body());
     }
 
