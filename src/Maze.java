@@ -13,23 +13,6 @@ public class Maze {
 
     private int mazeSum;
 
-    public Maze(int x, int y) {
-        maze = new char[y][x];
-        height = maze.length;
-        width = maze[0].length;
-
-        mazeSum = (height / 2 - 1) * (width / 2 - 1);
-
-        for(int i = 0; i < height; i++) {
-            for(int j = 0; j < width; j++) {
-                if(i == 0 || j == 0 || i == height-1 || j == width-1)
-                    maze[i][j] = '+';
-                else
-                    maze[i][j] = '1';
-            }
-        }
-    }
-
     public Maze(int[] size) {
         maze = new char[size[1]][size[0]];
         height = maze.length;
@@ -37,9 +20,9 @@ public class Maze {
 
         mazeSum = (height / 2 - 1) * (width / 2 - 1);
 
-        for(int i = 0; i < height; i++) {
-            for(int j = 0; j < width; j++) {
-                if(i == 0 || j == 0 || i == height-1 || j == width-1)
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (i == 0 || j == 0 || i == height - 1 || j == width - 1)
                     maze[i][j] = '+';
                 else
                     maze[i][j] = '1';
@@ -57,8 +40,8 @@ public class Maze {
 
     public int getActualSum() {
         int sum = 0;
-        for(int i = 1; i < height-1; i++) {
-            for (int j = 1; j < width-1; j++) {
+        for (int i = 1; i < height - 1; i++) {
+            for (int j = 1; j < width - 1; j++) {
                 if (maze[i][j] > '0')
                     sum++;
             }
@@ -67,25 +50,25 @@ public class Maze {
     }
 
     public void setPossibilitiesChars(int x, int y, boolean[] possibilities) {
-        for(int i = 0; i < dx.length; i++) {
-            if(maze[y+dy[i]][x+dx[i]] == '1') {
+        for (int i = 0; i < dx.length; i++) {
+            if (maze[y + dy[i]][x + dx[i]] == '1') {
                 maze[y + dy[i]][x + dx[i]] = possibilities[i] ? '#' : '+';
-                if(maze[y+dy[i]][x+dx[i]] == '#')
-                    maze[y + 2*dy[i]][x + 2*dx[i]] = '#';
+                if (maze[y + dy[i]][x + dx[i]] == '#')
+                    maze[y + 2 * dy[i]][x + 2 * dx[i]] = '#';
             }
         }
     }
 
-    public void setZerosAround(int x, int y){
-        for(int i = 0; i < dx.length; i++) {
-            if(maze[y+dy[i]][x+dx[i]] == '#') {
-                setChar(y+dy[i], x+dx[i], '0');
+    public void setZerosAround(int x, int y) {
+        for (int i = 0; i < dx.length; i++) {
+            if (maze[y + dy[i]][x + dx[i]] == '#') {
+                setChar(x + dx[i], y + dy[i], '0');
             }
         }
     }
 
     public boolean areAnyCharsAround(int x, int y, char c) {
-        return maze[y][x-1] == c || maze[y][x+1] == c || maze[y-1][x] == c || maze[y+1][x] == c;
+        return maze[y][x - 1] == c || maze[y][x + 1] == c || maze[y - 1][x] == c || maze[y + 1][x] == c;
     }
 
 
@@ -98,8 +81,8 @@ public class Maze {
     }
 
     public void printMaze() {
-        for(int i = 0; i < height; i++) {
-            for(int j = 0; j < width; j++) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 System.out.print(maze[i][j]);
             }
             System.out.println();

@@ -1,12 +1,12 @@
 public class Parser {
 
-    public boolean[] parsePossibilities(String body) { //bool[4] ← przygotowuje tablicę z body
+    public boolean[] parsePossibilities(String body) {
         boolean[] pos = new boolean[4];
 
         int directions = 0, dist = 2;
-        for(int i = 0; i < body.length(); i++) {
-            if(body.charAt(i) == ':') {
-                boolean pass = (body.charAt(i+dist) == '0');
+        for (int i = 0; i < body.length(); i++) {
+            if (body.charAt(i) == ':') {
+                boolean pass = (body.charAt(i + dist) == '0');
                 switch (directions) {
                     case 0:
                         pos[3] = pass;
@@ -32,7 +32,7 @@ public class Parser {
         String[] sizeString = body.split("x");
         int[] size = new int[sizeString.length];
 
-        for(int i = 0; i < size.length; i++)
+        for (int i = 0; i < size.length; i++)
             size[i] = Integer.parseInt(sizeString[i]) * 2 + 1;
 
         return size;
@@ -42,7 +42,7 @@ public class Parser {
         String[] startString = body.split(",");
         int[] start = new int[startString.length];
 
-        for(int i = 0; i < start.length; i++)
+        for (int i = 0; i < start.length; i++)
             start[i] = Integer.parseInt(startString[i]) * 2 - 1;
 
         return start;

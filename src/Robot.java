@@ -27,7 +27,7 @@ public class Robot {
     }
 
     public void move(int direction) {
-        switch(direction) {
+        switch (direction) {
             case LEFT:
                 x -= 2;
                 break;
@@ -43,7 +43,7 @@ public class Robot {
         }
     }
 
-    public boolean isAtStartPosition(){
+    public boolean isAtStartPosition() {
         return x == startPosition[0] && y == startPosition[1];
     }
 
@@ -63,17 +63,11 @@ public class Robot {
         return s.pop();
     }
 
-    public void print() {
-        System.out.println("Position: " + x + ", " + y);
-        System.out.print("Stack: ");
-        s.printStack();
-    }
-
-    public boolean isStackEmpty(){
+    public boolean isStackEmpty() {
         return s.isEmpty();
     }
 
-    public void setLastOperationPop(boolean lastOperationPop){
+    public void setLastOperationPop(boolean lastOperationPop) {
         this.lastOperationPop = lastOperationPop;
     }
 
@@ -89,7 +83,13 @@ public class Robot {
         }
 
         int pop() {
-            return s.remove(s.size()-1);
+            if (!s.isEmpty())
+                return s.remove(s.size() - 1);
+            else {
+                System.out.println("Sorry, stack is empty, no popping allowed!");
+                System.exit(1);
+            }
+            return 0;
         }
 
         boolean isEmpty() {
@@ -97,7 +97,7 @@ public class Robot {
         }
 
         void printStack() {
-            for(Integer i: s)
+            for (Integer i : s)
                 System.out.print(i + " ");
             System.out.println();
         }
