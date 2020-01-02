@@ -76,8 +76,16 @@ public class Maze {
         }
     }
 
-    public boolean areAnyHashesAround(int x, int y) {
-        return maze[y][x-1] == '#' || maze[y][x+1] == '#' || maze[y-1][x] == '#' || maze[y+1][x] == '#';
+    public void setZerosAround(int x, int y){
+        for(int i = 0; i < dx.length; i++) {
+            if(maze[y+dy[i]][x+dx[i]] == '#') {
+                setChar(y+dy[i], x+dx[i], '0');
+            }
+        }
+    }
+
+    public boolean areAnyCharsAround(int x, int y, char c) {
+        return maze[y][x-1] == c || maze[y][x+1] == c || maze[y-1][x] == c || maze[y+1][x] == c;
     }
 
 

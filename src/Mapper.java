@@ -20,47 +20,23 @@ public class Mapper {
         int direction;
         boolean[] possibilities;
 
-
-        int i = 0;
-        while(i < 8) {
-
+        while (!walle.isStackEmpty() && !walle.isAtStartPosition() && maze.areAnyCharsAround(walle.getX(), walle.getY(), '#')) {
             possibilities = get();
-
             maze.setPossibilitiesChars(walle.getX(), walle.getY(), possibilities);
-
             direction = choose();
             if (maze.getActualSum() == maze.getMazeSum())
                 return;
-            move(direction);
-            if(!walle.isLastOperationPop())
-                walle.push(direction);
+            if (!check(direction)) {
+                move(direction);
+                if (!walle.isLastOperationPop())
+                    walle.push(direction);
+            }
             walle.print();
             maze.printMaze();
             System.out.println();
-
-            i++;
         }
+        finishMaze();
         maze.printMaze();
-        System.out.println();
-        http.reset();
-
-
-/*        while(!walle.isStackEmpty() && !walle.isAtStartPosition() && maze.areAnyHashesAround(walle.getx(), walle.getY())){
-
-        }*/
-
-/*
-        robimy get, choose, move, push i na stos
-        while(!isRobocikNaStarcie && !s.isEmpty() && areHaszeWokółStart)
-            get
-            choose
-            checkSum
-            check
-            move
-            push
-        finishMaze
-*/
-
     }
 
     public void mapFromArray() {
@@ -75,7 +51,7 @@ public class Mapper {
     public int choose() {
         int result = 0;
         int[] pos = new int[]{walle.getX(), walle.getY()};
-        if(maze.areAnyHashesAround(pos[0], pos[1])) {
+        if(maze.areAnyCharsAround(pos[0], pos[1], '#')) {
             walle.setLastOperationPop(false);
 
             if (maze.getChar(pos[0], pos[1]+1) == '#')
@@ -117,9 +93,60 @@ public class Mapper {
         return null;
     }
 
-    public void finishMaze() { }  //lecim po całym labiryncie, zamieniając '1' na '+' i jeśli x ^ y % 2 == 0 to buildAWall i ustal czy ściana, czy nie ściana
+    public void finishMaze() {
+        fixAllOnes();
 
-    public boolean buildAWall(int x, int y) { return false; }
+        for(int i = 2; i < maze.getHeight(); i += 2) {
+            for(int j = 2; j < maze.getWidth(); j += 2) {
+                if(buildAWall(j, i))
+                    maze.setChar(j, i, '+');
+                else
+                    maze.setChar(j, i, '0');
+            }
+        }
+    }
 
-    public boolean check(int x, int y) { return false; } //sprawdza czy zna wszystkich sąsiadów pola [x, y]
+    public void fixAllOnes() {
+        for(int i = 0; i < maze.getHeight(); i++) {
+            for(int j = 0; j < maze.getWidth(); j++) {
+                if(i % 2 != 0 && j % 2 != 0 &&  maze.getChar(j, i) == '1')
+                    maze.setChar(j, i, '+');
+            }
+        }
+    }
+
+    public boolean buildAWall(int x, int y) {
+        return maze.areAnyCharsAround(x, y, '+');
+    }
+
+
+    public boolean check(int direction) {
+        boolean result = true;
+        switch(direction) {
+            case LEFT:
+                result = handleNode(walle.getX()-1, walle.getY());
+                break;
+            case UP:
+                result = handleNode(walle.getX(), walle.getY()-1);
+                break;
+            case RIGHT:
+                result = handleNode (walle.getX()+1, walle.getY());
+                break;
+            case DOWN:
+                result = handleNode (walle.getX(), walle.getY()+1);
+                break;
+        }
+        return result;
+    } //sprawdza czy zna wszystkich sąsiadów pola [x, y]
+
+    private boolean handleNode(int x, int y) {
+        boolean result;
+        if (maze.areAnyCharsAround(x, y , '1')){
+            result = true;
+        } else {
+            result = false;
+            maze.setZerosAround(x, y);
+        }
+        return result;
+    }
 }
