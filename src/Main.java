@@ -2,7 +2,7 @@ import java.io.FileNotFoundException;
 
 public class Main {
 
-    private static final int mapNumber = 2;
+    private static final int mapNumber = 3;
     private static final String NAJLEPSZEuId = "684219c0";
 
     public static void main(String[] args) throws FileNotFoundException {

@@ -65,12 +65,13 @@ public class HTTPConnector {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(getBase(uId, mapId).append("/move/").append(direction).toString()))
                 .POST(HttpRequest.BodyPublishers.ofString("")).build();
+        HttpResponse<String> response = getResponse(request);
+
     }
 
     public void postReset() {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(resetUriString)).POST(HttpRequest.BodyPublishers.ofString("")).build();
         HttpResponse<String> response = getResponse(request);
-        //response.body() <-- można sprawdzić czy wyszło resetowanie (ale można też nie)
     }
 
     public void postUpload(String path) throws FileNotFoundException {
@@ -78,7 +79,6 @@ public class HTTPConnector {
                 .uri(URI.create(uploadUriString)).POST(HttpRequest.BodyPublishers.ofFile(Paths.get(path)))
                 .build();
         HttpResponse<String> response = getResponse(request);
-        //response.body() <-- to jest ile procent dobrze zmapowaliśmy maze
     }
 
     public int[] getSize() {

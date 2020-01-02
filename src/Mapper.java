@@ -9,7 +9,7 @@ public class Mapper {
     private final int RIGHT = -1;
     private final int DOWN = -2;
 
-    private final int CHOSE_ERROR = -5;
+    private final int CHOOSE_ERROR = -5;
 
     public Mapper(HTTPConnector http) {
         this.http = http;
@@ -29,7 +29,7 @@ public class Mapper {
             maze.setPossibilitiesChars(walle.getX(), walle.getY(), possibilities);
             direction = choose();
 
-            if (direction == CHOSE_ERROR)
+            if (direction == CHOOSE_ERROR)
                 break;
             if (maze.getActualSum() == maze.getMazeSum())
                 break;
@@ -41,6 +41,7 @@ public class Mapper {
         } while (!(walle.isStackEmpty() && walle.isAtStartPosition() && !maze.areAnyCharsAround(walle.getX(), walle.getY(), '#')));
 
         finishMaze();
+
         maze.printMaze();
         System.out.println(http.getMoves());
 
@@ -67,7 +68,7 @@ public class Mapper {
             if (maze.getChar(pos[0] - 1, pos[1]) == '#')
                 result = 1;
         } else if (!(maze.areAnyCharsAround(pos[0], pos[1], '#') || maze.areAnyCharsAround(pos[0], pos[1], '0'))) {
-            return CHOSE_ERROR;
+            return CHOOSE_ERROR;
         } else {
             walle.setLastOperationPop(true);
             result = -walle.pop();
