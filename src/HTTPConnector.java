@@ -1,6 +1,11 @@
+import Exceptions.ForbiddenMoveException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -21,6 +26,19 @@ public class HTTPConnector {
     private String uploadUriString;
 
     public HTTPConnector(String uId, int mapId) {
+        try {
+            URL url = new URL("http://tesla.iem.pw.edu.pl:4444");
+            URLConnection connection = url.openConnection();
+            connection.connect();
+            System.out.println("Connection working!");
+        } catch(MalformedURLException e) {
+            System.out.println("VPN or Internet not connected!");
+            System.exit(1);
+        } catch(IOException e) {
+            System.out.println("Internet or VPN not connected!");
+            System.exit(2);
+        }
+
         this.uId = uId;
         this.mapId = mapId;
         client = HttpClient.newHttpClient();
@@ -66,7 +84,9 @@ public class HTTPConnector {
                 .uri(URI.create(getBase(uId, mapId).append("/move/").append(direction).toString()))
                 .POST(HttpRequest.BodyPublishers.ofString("")).build();
         HttpResponse<String> response = getResponse(request);
-
+/*
+        if(response.statusCode() == 403)
+            throw new ForbiddenMoveException(response.body());*/
     }
 
     public void postReset() {
