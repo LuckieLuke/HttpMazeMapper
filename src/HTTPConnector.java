@@ -78,15 +78,15 @@ public class HTTPConnector {
         return result;
     }
 
-    public void postMove(int intDirection) {
+    public void postMove(int intDirection) throws ForbiddenMoveException {
         String direction = getDirection(intDirection);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(getBase(uId, mapId).append("/move/").append(direction).toString()))
                 .POST(HttpRequest.BodyPublishers.ofString("")).build();
         HttpResponse<String> response = getResponse(request);
-/*
+
         if(response.statusCode() == 403)
-            throw new ForbiddenMoveException(response.body());*/
+            throw new ForbiddenMoveException(response.body());
     }
 
     public void postReset() {
