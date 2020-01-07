@@ -2,7 +2,7 @@ import java.io.FileNotFoundException;
 
 public class Main {
 
-    private static final int mapNumber = 3;
+    private static final int mapNumber = 1;
     private static final String NAJLEPSZEuId = "684219c0";
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -16,10 +16,18 @@ public class Main {
     }
 
     public static void save(Maze maze, String path) throws FileNotFoundException {
-        MazeFile.saveToFile(maze, path);
+        try {
+            MazeFile.saveToFile(maze, path);
+        } catch(FileNotFoundException e) {
+            throw new FileNotFoundException("Cannot save to file!");
+        }
     }
 
     public static void upload(HTTPConnector http, String path) throws FileNotFoundException {
-        http.postUpload(path);
+        try {
+            http.postUpload(path);
+        } catch(FileNotFoundException e) {
+            throw new FileNotFoundException("Cannot upload a file - file not found!");
+        }
     }
 }

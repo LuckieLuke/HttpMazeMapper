@@ -1,7 +1,7 @@
 package Exceptions;
 
-public class NotFoundException extends Exception { //code 404
-    public NotFoundException(String msg) { //tutaj możemy podawać body
+public class NotFoundException extends Exception {
+    public NotFoundException(String msg) {
         super(msg);
     }
 }

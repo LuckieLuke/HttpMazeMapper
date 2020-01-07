@@ -55,6 +55,10 @@ public class Robot {
         return y;
     }
 
+    public int[] getPosition() {
+        return new int[]{x, y};
+    }
+
     public void push(int direction) {
         s.push(direction);
     }

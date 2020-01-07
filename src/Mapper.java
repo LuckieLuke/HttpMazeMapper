@@ -1,3 +1,7 @@
+import Exceptions.BadRequestException;
+import Exceptions.ForbiddenMoveException;
+import Exceptions.NotFoundException;
+
 public class Mapper {
 
     private HTTPConnector http;
@@ -16,17 +20,27 @@ public class Mapper {
     }
 
     public Maze mapFromHttp() {
-        maze = new Maze(http.getSize());
-        walle = new Robot(http.getStartPosition());
+        try {
+            maze = new Maze(http.getSize());
+            walle = new Robot(http.getStartPosition());
+        } catch (NotFoundException e) {
+            System.err.println("NotFoundException caught!");
+            System.err.println(e.getMessage());
+        } catch (BadRequestException e) {
+            System.err.println("BadRequestException caught!");
+            System.err.println(e.getMessage());
+        }
 
         int direction;
         boolean[] possibilities;
 
+        //to be hidden when executed without reset command
         http.postReset();
 
         do {
+
             possibilities = get();
-            maze.setPossibilitiesChars(walle.getX(), walle.getY(), possibilities);
+            maze.setPossibilitiesChars(walle.getPosition()[0], walle.getPosition()[1], possibilities);
             direction = choose();
 
             if (direction == CHOOSE_ERROR)
@@ -43,19 +57,36 @@ public class Mapper {
         finishMaze();
 
         maze.printMaze();
-        System.out.println(http.getMoves());
+        try {
+            System.out.println(http.getMoves());
+        } catch (NotFoundException e) {
+            System.err.println("NotFoundException caught!");
+            System.err.println(e.getMessage());
+        } catch (BadRequestException e) {
+            System.err.println("BadRequestException caught!");
+            System.err.println(e.getMessage());
+        }
 
         return maze;
     }
 
     public boolean[] get() {
         maze.setChar(walle.getX(), walle.getY(), '0');
-        return http.getPossibilities();
+        try {
+            return http.getPossibilities();
+        } catch (BadRequestException e) {
+            System.err.println("BadRequestException caught!");
+            System.err.println(e.getMessage());
+        } catch (NotFoundException e) {
+            System.err.println("NotFoundException caught!");
+            System.err.println(e.getMessage());
+        }
+        return new boolean[]{false, false, false, false};
     }
 
     public int choose() {
         int result = 0;
-        int[] pos = new int[]{walle.getX(), walle.getY()};
+        int[] pos = walle.getPosition();
         if (maze.areAnyCharsAround(pos[0], pos[1], '#')) {
             walle.setLastOperationPop(false);
 
@@ -77,22 +108,28 @@ public class Mapper {
     }
 
     public void move(int direction) {
+        int[] pos = walle.getPosition();
         switch (direction) {
             case LEFT:
-                maze.setChar(walle.getX() - 1, walle.getY(), '0');
+                maze.setChar(pos[0] - 1, pos[1], '0');
                 break;
             case UP:
-                maze.setChar(walle.getX(), walle.getY() - 1, '0');
+                maze.setChar(pos[0], pos[1] - 1, '0');
                 break;
             case RIGHT:
-                maze.setChar(walle.getX() + 1, walle.getY(), '0');
+                maze.setChar(pos[0] + 1, pos[1], '0');
                 break;
             case DOWN:
-                maze.setChar(walle.getX(), walle.getY() + 1, '0');
+                maze.setChar(pos[0], pos[1] + 1, '0');
                 break;
         }
         walle.move(direction);
-        http.postMove(direction);
+        try {
+            http.postMove(direction);
+        } catch (ForbiddenMoveException e) {
+            System.err.println("ForbiddenMoveException caught!");
+            System.err.println(e.getMessage());
+        }
     }
 
     public void finishMaze() {
@@ -126,19 +163,20 @@ public class Mapper {
 
     public boolean checkIfNotYetKnown(int direction) {
         boolean result = true;
+        int[] pos = walle.getPosition();
         if (!walle.isLastOperationPop()) {
             switch (direction) {
                 case LEFT:
-                    result = handleNode(walle.getX() - 2, walle.getY());
+                    result = handleNode(pos[0] - 2, pos[1]);
                     break;
                 case UP:
-                    result = handleNode(walle.getX(), walle.getY() - 2);
+                    result = handleNode(pos[0], pos[1] - 2);
                     break;
                 case RIGHT:
-                    result = handleNode(walle.getX() + 2, walle.getY());
+                    result = handleNode(pos[0] + 2, pos[1]);
                     break;
                 case DOWN:
-                    result = handleNode(walle.getX(), walle.getY() + 2);
+                    result = handleNode(pos[0], pos[1] + 2);
                     break;
             }
         }

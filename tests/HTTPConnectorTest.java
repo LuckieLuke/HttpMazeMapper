@@ -1,10 +1,12 @@
+import Exceptions.BadRequestException;
+import Exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HTTPConnectorTest {
 
     @Test
-    public void getSize() {
+    public void getSize() throws BadRequestException, NotFoundException {
         HTTPConnector con = new HTTPConnector("684219c0", 1);
         int[] sizeRes = con.getSize();
 
@@ -14,7 +16,7 @@ public class HTTPConnectorTest {
     }
 
     @Test
-    void getStartPosition() {
+    void getStartPosition() throws BadRequestException, NotFoundException {
         HTTPConnector con = new HTTPConnector("684219c0", 2);
         int[] posRes = con.getStartPosition();
 
@@ -24,7 +26,7 @@ public class HTTPConnectorTest {
     }
 
     @Test
-    void getMoves() {
+    void getMoves() throws NotFoundException, BadRequestException {
         HTTPConnector con = new HTTPConnector("684219c0", 3);
         int moves = con.getMoves();
 
@@ -34,7 +36,7 @@ public class HTTPConnectorTest {
     }
 
     @Test
-    void getPossibilities() {
+    void getPossibilities() throws BadRequestException, NotFoundException {
         HTTPConnector con = new HTTPConnector("684219c0", 4);
         boolean[] possRes = con.getPossibilities();
 

@@ -1,7 +1,7 @@
 package Exceptions;
 
-public class BadRequestException extends Exception { //code 400
-    public BadRequestException(String msg) { //to co w notfoundexc
+public class BadRequestException extends Exception {
+    public BadRequestException(String msg) {
         super(msg);
     }
 }

@@ -1,4 +1,6 @@
+import Exceptions.BadRequestException;
 import Exceptions.ForbiddenMoveException;
+import Exceptions.NotFoundException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,7 +29,7 @@ public class HTTPConnector {
 
     public HTTPConnector(String uId, int mapId) {
         try {
-            URL url = new URL("http://tesla.iem.pw.edu.pl:4444");
+            URL url = new URL("http://tesla.iem.pw.edu.pl:4444/");
             URLConnection connection = url.openConnection();
             connection.connect();
             System.out.println("Connection working!");
@@ -101,27 +103,51 @@ public class HTTPConnector {
         HttpResponse<String> response = getResponse(request);
     }
 
-    public int[] getSize() {
+    public int[] getSize() throws BadRequestException, NotFoundException {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(sizeUriString)).build();
         HttpResponse<String> response = getResponse(request);
+
+        if(response.statusCode() == 400)
+            throw new BadRequestException(response.body());
+        else if(response.statusCode() == 404)
+            throw new NotFoundException(response.body());
+
         return parsik.parseSize(response.body());
     }
 
-    public int[] getStartPosition() {
+    public int[] getStartPosition() throws BadRequestException, NotFoundException {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(startPositionUriString)).build();
         HttpResponse<String> response = getResponse(request);
+
+        if(response.statusCode() == 400)
+            throw new BadRequestException(response.body());
+        else if(response.statusCode() == 404)
+            throw new NotFoundException(response.body());
+
         return parsik.parseStartPosition(response.body());
     }
 
-    public int getMoves() {
+    public int getMoves() throws NotFoundException, BadRequestException {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(movesUriString)).build();
         HttpResponse<String> response = getResponse(request);
+
+        if(response.statusCode() == 400)
+            throw new BadRequestException(response.body());
+        else if(response.statusCode() == 404)
+            throw new NotFoundException(response.body());
+
         return parsik.parseMoves(response.body());
     }
 
-    public boolean[] getPossibilities() {
+    public boolean[] getPossibilities() throws BadRequestException, NotFoundException {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(possibilitiesUriString)).build();
         HttpResponse<String> response = getResponse(request);
+
+        if(response.statusCode() == 400)
+            throw new BadRequestException(response.body());
+        else if(response.statusCode() == 404)
+            throw new NotFoundException(response.body());
+
         return parsik.parsePossibilities(response.body());
     }
 
