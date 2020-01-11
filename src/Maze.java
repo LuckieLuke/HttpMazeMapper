@@ -88,4 +88,18 @@ public class Maze {
             System.out.println();
         }
     }
+
+    public void printMaze(Robot walle) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (j == walle.getPosition()[0] && i == walle.getPosition()[1]) {
+                    System.out.print("\u001B[34m" + "■" + "\u001B[0m");
+                    ;
+                } else {
+                    System.out.print(maze[i][j]);
+                }
+            }
+            System.out.println();
+        }
+    }
 }

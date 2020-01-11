@@ -71,6 +71,23 @@ public class Robot {
         return s.isEmpty();
     }
 
+    public int getStackSize() {
+        return s.getSize();
+    }
+
+    public void changeStartPosition(int[] pos) {
+        startPosition = pos;
+    }
+
+    public void printStart() {
+        System.out.println(startPosition[0] + " " + startPosition[1]);
+    }
+
+    public void print() {
+        System.out.println("Robot position: " + x + " " + y);
+        s.printStack();
+    }
+
     public void setLastOperationPop(boolean lastOperationPop) {
         this.lastOperationPop = lastOperationPop;
     }
@@ -80,6 +97,10 @@ public class Robot {
 
         Stack() {
             s = new ArrayList<>();
+        }
+
+        int getSize() {
+            return s.size();
         }
 
         void push(Integer x) {

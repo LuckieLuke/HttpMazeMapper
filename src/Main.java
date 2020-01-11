@@ -1,11 +1,14 @@
+import Exceptions.BadRequestException;
+import Exceptions.NotFoundException;
+
 import java.io.FileNotFoundException;
 
 public class Main {
 
-    private static final int mapNumber = 1;
+    private static final int mapNumber = 3;
     private static final String NAJLEPSZEuId = "684219c0";
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, NotFoundException, BadRequestException {
         HTTPConnector http = new HTTPConnector(NAJLEPSZEuId, mapNumber);
         Mapper mapper = new Mapper(http);
         Maze m = mapper.mapFromHttp();

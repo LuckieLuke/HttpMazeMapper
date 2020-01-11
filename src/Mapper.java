@@ -2,7 +2,7 @@ import Exceptions.BadRequestException;
 import Exceptions.ForbiddenMoveException;
 import Exceptions.NotFoundException;
 
-public class Mapper {
+class Mapper {
 
     private HTTPConnector http;
     private Robot walle;
@@ -19,7 +19,7 @@ public class Mapper {
         this.http = http;
     }
 
-    public Maze mapFromHttp() {
+    public Maze mapFromHttp() throws NotFoundException, BadRequestException {
         try {
             maze = new Maze(http.getSize());
             walle = new Robot(http.getStartPosition());
@@ -38,8 +38,17 @@ public class Mapper {
         http.postReset();
 
         do {
-
             possibilities = get();
+
+            if (http.getMoves() > 0 && walle.getStackSize() == 1) {
+                int temp = walle.pop();
+                if (wellKnownNode(-temp)) {
+                    System.out.println("Not pushing back!");
+                    walle.changeStartPosition(walle.getPosition());
+                } else
+                    walle.push(temp);
+            }
+
             maze.setPossibilitiesChars(walle.getPosition()[0], walle.getPosition()[1], possibilities);
             direction = choose();
 
@@ -47,11 +56,17 @@ public class Mapper {
                 break;
             if (maze.getActualSum() == maze.getMazeSum())
                 break;
+
             if (checkIfNotYetKnown(direction)) {
                 move(direction);
                 if (!walle.isLastOperationPop())
                     walle.push(direction);
             }
+
+            walle.print();
+            walle.printStart();
+            maze.printMaze(walle);
+            System.out.println();
         } while (!(walle.isStackEmpty() && walle.isAtStartPosition() && !maze.areAnyCharsAround(walle.getX(), walle.getY(), '#')));
 
         finishMaze();
@@ -70,7 +85,27 @@ public class Mapper {
         return maze;
     }
 
-    public boolean[] get() {
+    public boolean wellKnownNode(int direction) {
+        boolean result = false;
+        switch (direction) {
+            case LEFT:
+                result = !maze.areAnyCharsAround(walle.getPosition()[0] - 2, walle.getPosition()[1], '#');
+                break;
+            case UP:
+                result = !maze.areAnyCharsAround(walle.getPosition()[0], walle.getPosition()[1] - 2, '#');
+                break;
+            case RIGHT:
+                result = !maze.areAnyCharsAround(walle.getPosition()[0] + 2, walle.getPosition()[1], '#');
+                break;
+            case DOWN:
+                result = !maze.areAnyCharsAround(walle.getPosition()[0], walle.getPosition()[1] + 2, '#');
+                break;
+        }
+        System.out.println("Checking " + walle.getX() + ", " + walle.getY() + " in direction: " + direction);
+        return result;
+    }
+
+    private boolean[] get() {
         maze.setChar(walle.getX(), walle.getY(), '0');
         try {
             return http.getPossibilities();
@@ -84,7 +119,7 @@ public class Mapper {
         return new boolean[]{false, false, false, false};
     }
 
-    public int choose() {
+    private int choose() {
         int result = 0;
         int[] pos = walle.getPosition();
         if (maze.areAnyCharsAround(pos[0], pos[1], '#')) {
@@ -98,16 +133,18 @@ public class Mapper {
                 result = 2;
             if (maze.getChar(pos[0] - 1, pos[1]) == '#')
                 result = 1;
+
         } else if (!(maze.areAnyCharsAround(pos[0], pos[1], '#') || maze.areAnyCharsAround(pos[0], pos[1], '0'))) {
             return CHOOSE_ERROR;
-        } else {
+        } else if(walle.getStackSize() != 0) {
             walle.setLastOperationPop(true);
             result = -walle.pop();
-        }
+        } else
+            return CHOOSE_ERROR;
         return result;
     }
 
-    public void move(int direction) {
+    private void move(int direction) {
         int[] pos = walle.getPosition();
         switch (direction) {
             case LEFT:
@@ -132,7 +169,7 @@ public class Mapper {
         }
     }
 
-    public void finishMaze() {
+    private void finishMaze() {
         fixAllOnes();
 
         for (int i = 2; i < maze.getHeight() - 1; i += 2) {
@@ -145,7 +182,7 @@ public class Mapper {
         }
     }
 
-    public void fixAllOnes() {
+    private void fixAllOnes() {
         for (int i = 0; i < maze.getHeight(); i++) {
             for (int j = 0; j < maze.getWidth(); j++) {
                 if ((i % 2 != 0 || j % 2 != 0) && maze.getChar(j, i) == '1')
@@ -156,12 +193,12 @@ public class Mapper {
         }
     }
 
-    public boolean buildAWall(int x, int y) {
+    private boolean buildAWall(int x, int y) {
         return maze.areAnyCharsAround(x, y, '+');
     }
 
 
-    public boolean checkIfNotYetKnown(int direction) {
+    private boolean checkIfNotYetKnown(int direction) {
         boolean result = true;
         int[] pos = walle.getPosition();
         if (!walle.isLastOperationPop()) {
