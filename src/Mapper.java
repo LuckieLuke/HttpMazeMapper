@@ -19,7 +19,7 @@ class Mapper {
         this.http = http;
     }
 
-    public Maze mapFromHttp() throws NotFoundException, BadRequestException {
+    public Maze map() throws NotFoundException, BadRequestException {
         try {
             maze = new Maze(http.getSize());
             walle = new Robot(http.getStartPosition());
@@ -43,7 +43,6 @@ class Mapper {
             if (http.getMoves() > 0 && walle.getStackSize() == 1) {
                 int temp = walle.pop();
                 if (wellKnownNode(-temp)) {
-                    System.out.println("Not pushing back!");
                     walle.changeStartPosition(walle.getPosition());
                 } else
                     walle.push(temp);
@@ -63,17 +62,13 @@ class Mapper {
                     walle.push(direction);
             }
 
-            walle.print();
-            walle.printStart();
-            maze.printMaze(walle);
-            System.out.println();
         } while (!(walle.isStackEmpty() && walle.isAtStartPosition() && !maze.areAnyCharsAround(walle.getX(), walle.getY(), '#')));
 
         finishMaze();
 
         maze.printMaze();
         try {
-            System.out.println(http.getMoves());
+            System.out.println("Moves: " + http.getMoves());
         } catch (NotFoundException e) {
             System.err.println("NotFoundException caught!");
             System.err.println(e.getMessage());
@@ -85,7 +80,7 @@ class Mapper {
         return maze;
     }
 
-    public boolean wellKnownNode(int direction) {
+    private boolean wellKnownNode(int direction) {
         boolean result = false;
         switch (direction) {
             case LEFT:
@@ -101,7 +96,6 @@ class Mapper {
                 result = !maze.areAnyCharsAround(walle.getPosition()[0], walle.getPosition()[1] + 2, '#');
                 break;
         }
-        System.out.println("Checking " + walle.getX() + ", " + walle.getY() + " in direction: " + direction);
         return result;
     }
 
@@ -136,7 +130,7 @@ class Mapper {
 
         } else if (!(maze.areAnyCharsAround(pos[0], pos[1], '#') || maze.areAnyCharsAround(pos[0], pos[1], '0'))) {
             return CHOOSE_ERROR;
-        } else if(walle.getStackSize() != 0) {
+        } else if (walle.getStackSize() != 0) {
             walle.setLastOperationPop(true);
             result = -walle.pop();
         } else

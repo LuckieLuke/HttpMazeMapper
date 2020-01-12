@@ -33,10 +33,10 @@ public class HTTPConnector {
             URLConnection connection = url.openConnection();
             connection.connect();
             System.out.println("Connection working!");
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             System.out.println("VPN or Internet not connected!");
             System.exit(1);
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("Internet or VPN not connected!");
             System.exit(2);
         }
@@ -87,7 +87,7 @@ public class HTTPConnector {
                 .POST(HttpRequest.BodyPublishers.ofString("")).build();
         HttpResponse<String> response = getResponse(request);
 
-        if(response.statusCode() == 403)
+        if (response.statusCode() == 403)
             throw new ForbiddenMoveException(response.body());
     }
 
@@ -101,15 +101,16 @@ public class HTTPConnector {
                 .uri(URI.create(uploadUriString)).POST(HttpRequest.BodyPublishers.ofFile(Paths.get(path)))
                 .build();
         HttpResponse<String> response = getResponse(request);
+        System.out.println(response.body());
     }
 
     public int[] getSize() throws BadRequestException, NotFoundException {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(sizeUriString)).build();
         HttpResponse<String> response = getResponse(request);
 
-        if(response.statusCode() == 400)
+        if (response.statusCode() == 400)
             throw new BadRequestException(response.body());
-        else if(response.statusCode() == 404)
+        else if (response.statusCode() == 404)
             throw new NotFoundException(response.body());
 
         return parsik.parseSize(response.body());
@@ -119,9 +120,9 @@ public class HTTPConnector {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(startPositionUriString)).build();
         HttpResponse<String> response = getResponse(request);
 
-        if(response.statusCode() == 400)
+        if (response.statusCode() == 400)
             throw new BadRequestException(response.body());
-        else if(response.statusCode() == 404)
+        else if (response.statusCode() == 404)
             throw new NotFoundException(response.body());
 
         return parsik.parseStartPosition(response.body());
@@ -131,9 +132,9 @@ public class HTTPConnector {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(movesUriString)).build();
         HttpResponse<String> response = getResponse(request);
 
-        if(response.statusCode() == 400)
+        if (response.statusCode() == 400)
             throw new BadRequestException(response.body());
-        else if(response.statusCode() == 404)
+        else if (response.statusCode() == 404)
             throw new NotFoundException(response.body());
 
         return parsik.parseMoves(response.body());
@@ -143,9 +144,9 @@ public class HTTPConnector {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(possibilitiesUriString)).build();
         HttpResponse<String> response = getResponse(request);
 
-        if(response.statusCode() == 400)
+        if (response.statusCode() == 400)
             throw new BadRequestException(response.body());
-        else if(response.statusCode() == 404)
+        else if (response.statusCode() == 404)
             throw new NotFoundException(response.body());
 
         return parsik.parsePossibilities(response.body());

@@ -79,15 +79,6 @@ public class Robot {
         startPosition = pos;
     }
 
-    public void printStart() {
-        System.out.println(startPosition[0] + " " + startPosition[1]);
-    }
-
-    public void print() {
-        System.out.println("Robot position: " + x + " " + y);
-        s.printStack();
-    }
-
     public void setLastOperationPop(boolean lastOperationPop) {
         this.lastOperationPop = lastOperationPop;
     }

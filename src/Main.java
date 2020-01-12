@@ -5,31 +5,36 @@ import java.io.FileNotFoundException;
 
 public class Main {
 
-    private static final int mapNumber = 3;
-    private static final String NAJLEPSZEuId = "684219c0";
+    /*
+     ** Please, remember to hide line no. 38 in Mapper class
+     ** if there is no reset command available.
+     */
+
+    private static final int mapNumber = 4;
+    private static final String uId = "684219c0";
 
     public static void main(String[] args) throws FileNotFoundException, NotFoundException, BadRequestException {
-        HTTPConnector http = new HTTPConnector(NAJLEPSZEuId, mapNumber);
+        HTTPConnector http = new HTTPConnector(uId, mapNumber);
         Mapper mapper = new Mapper(http);
-        Maze m = mapper.mapFromHttp();
+        Maze m = mapper.map();
 
         String path = mapNumber + ".txt";
         save(m, path);
         upload(http, path);
     }
 
-    public static void save(Maze maze, String path) throws FileNotFoundException {
+    private static void save(Maze maze, String path) throws FileNotFoundException {
         try {
             MazeFile.saveToFile(maze, path);
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             throw new FileNotFoundException("Cannot save to file!");
         }
     }
 
-    public static void upload(HTTPConnector http, String path) throws FileNotFoundException {
+    private static void upload(HTTPConnector http, String path) throws FileNotFoundException {
         try {
             http.postUpload(path);
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             throw new FileNotFoundException("Cannot upload a file - file not found!");
         }
     }
